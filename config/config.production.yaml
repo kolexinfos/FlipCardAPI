@@ -1,0 +1,6 @@
+#prod database config for MYSQL
+db:
+  name: flipcard
+  host: some-production-ip
+  user: denachural
+  password: @ENV{MYSQL_PASSWORD}
