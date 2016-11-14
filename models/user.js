@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Schema = mongoose.Schema;
 
 // Schema defines how the user's data will be stored in MongoDB
 const UserSchema = new mongoose.Schema({
@@ -29,7 +30,11 @@ const UserSchema = new mongoose.Schema({
   verified:{
     type: Boolean,
     default:false
-  }
+  },
+  badges: [{
+     type: Schema.Types.ObjectId, 
+     ref: 'Badge' 
+  }]
 },{
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp.
 });

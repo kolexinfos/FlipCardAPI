@@ -3,22 +3,14 @@ const Schema = mongoose.Schema;
 
 
 // Schema defines how the user's data will be stored in MongoDB
-const DeckSchema = new mongoose.Schema({
-  name: {
+const DeckLogSchema = new mongoose.Schema({
+  logname: {
     type: String,
     required: true
-  },
-  description: {
-      type: String,
-      required: true
-  },
-  _cards:[{
-     type: Schema.Types.ObjectId, 
-     ref: 'Card' 
-  }]
+  }
   
 },{
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp.
 });
 
-module.exports = mongoose.model('Deck', DeckSchema);
+module.exports = mongoose.model('DeckLog', DeckLogSchema);
