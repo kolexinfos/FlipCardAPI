@@ -1,49 +1,53 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-require('./config')().loadConfig()
+// Include our packages in our main server file
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const passport = require('passport');
 
-var routes = require('./routes/index');
+
+const jwt = require('jsonwebtoken');
+
+const config = require('./config/main');
+const cors = require('cors');
+const port = 3000;
+
+app.use(cors());
+
+const requireAuth = passport.authenticate('jwt', { session: false });
+
+// Initialize passport for use
+app.use(passport.initialize());
+
+// Bring in defined Passport Strategy
+require('./config/passport')(passport);
+
 var users = require('./routes/users');
+//var badges = require('./routes/badges');
+//var cards = require('./routes/badges');
+//var decks = require('./routes/badges');
 
-var app = express();
 
-app.use(logger('dev'));
+// Use body-parser to get POST requests for API use
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+
+// Log requests to console
+app.use(morgan('dev'));
+
+// Home route. We'll end up changing this to our main front end index later.
+app.get('/', function(req, res) {
+  res.json('Relax. We will put the home page here later.');
+});
+
+// Connect to database
+mongoose.connect(config.database);
+
+
 app.use('/users', users);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handlers
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500)
-        .json({
-      message: err.message,
-      error: err
-    })
-  });
-}
-
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500).json({
-    message: err.message,
-    error: {}
-  })
-});
+//app.use('/badge', badges);
 
 
 module.exports = app;

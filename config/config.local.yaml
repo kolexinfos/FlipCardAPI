@@ -1,6 +1,0 @@
-#local config for db
-db:
-  name: flipcard
-  host: @ENV{MYSQL_HOST}
-  user: @ENV{MYSQL_USER}
-  password: @ENV{MYSQL_PASSWORD}
