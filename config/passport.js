@@ -1,24 +1,140 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const User = require('../models/user');
-const config = require('../config/main');
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var InstagramStrategy = require('passport-instagram').Strategy;
 
-// Setup work and export for the JWT passport strategy
-module.exports = function(passport) {
-  const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeader(),
-    secretOrKey: config.secret
-  };
-  passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.id}, function(err, user) {
-      if (err) {
-        return done(err, false);
+const User = require('../models/user');
+const config = require('./oauth.js');
+
+module.exports = passport.use(new FacebookStrategy({
+  clientID: config.facebook.clientID,
+  clientSecret: config.facebook.clientSecret,
+  callbackURL: config.facebook.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOne({ oauthID: profile.id }, function(err, user) {
+      if(err) {
+        console.log(err);  // handle errors!
       }
-      if (user) {
+      if (!err && user !== null) {
         done(null, user);
       } else {
-        done(null, false);
+        user = new User({
+          oauthID: profile.id,
+          name: profile.displayName,
+          created: Date.now()
+        });
+        user.save(function(err) {
+          if(err) {
+            console.log(err);  // handle errors!
+          } else {
+            console.log("saving user ...");
+            done(null, user);
+          }
+        });
       }
     });
-  }));
-};
+  }
+));
+
+passport.use(new TwitterStrategy({
+  consumerKey: config.twitter.consumerKey,
+  consumerSecret: config.twitter.consumerSecret,
+  callbackURL: config.twitter.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOne({ oauthID: profile.id }, function(err, user) {
+      if(err) {
+        console.log(err);  // handle errors!
+      }
+      if (!err && user !== null) {
+        done(null, user);
+      } else {
+        user = new User({
+          oauthID: profile.id,
+          name: profile.displayName,
+          created: Date.now()
+        });
+        user.save(function(err) {
+          if(err) {
+            console.log(err);  // handle errors!
+          } else {
+            console.log("saving user ...");
+            done(null, user);
+          }
+        });
+      }
+    });
+  }
+));
+
+
+
+passport.use(new GoogleStrategy({
+  clientID: config.google.clientID,
+  clientSecret: config.google.clientSecret,
+  callbackURL: config.google.callbackURL
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+    User.findOne({ oauthID: profile.id }, function(err, user) {
+      if(err) {
+        console.log(err);  // handle errors!
+      }
+      if (!err && user !== null) {
+        done(null, user);
+      } else {
+        user = new User({
+          oauthID: profile.id,
+          name: profile.displayName,
+          created: Date.now()
+        });
+        user.save(function(err) {
+          if(err) {
+            console.log(err);  // handle errors!
+          } else {
+            console.log("saving user ...");
+            done(null, user);
+          }
+        });
+      }
+    });
+  }
+));
+
+passport.use(new InstagramStrategy({
+  clientID: config.instagram.clientID,
+  clientSecret: config.instagram.clientSecret,
+  callbackURL: config.instagram.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOne({ oauthID: profile.id }, function(err, user) {
+      if(err) {
+        console.log(err);  // handle errors!
+      }
+      if (!err && user !== null) {
+        done(null, user);
+      } else {
+        user = new User({
+          oauthID: profile.id,
+          name: profile.displayName,
+          created: Date.now()
+        });
+        user.save(function(err) {
+          if(err) {
+            console.log(err);  // handle errors!
+          } else {
+            console.log("saving user ...");
+            done(null, user);
+          }
+        });
+      }
+    });
+  }
+));
+
+
+
+

@@ -5,23 +5,32 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const passport = require('passport');
+var fbAuth = require('./config/passport');
+var User = require('./models/user');
 
-
-const jwt = require('jsonwebtoken');
 
 const config = require('./config/main');
 const cors = require('cors');
 const port = 3000;
 
+//Enable CORS
 app.use(cors());
 
-const requireAuth = passport.authenticate('jwt', { session: false });
 
-// Initialize passport for use
-app.use(passport.initialize());
+// serialize and deserialize
+passport.serializeUser(function(user, done) {
+  console.log('serializeUser: ' + user._id);
+  done(null, user._id);
+});
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user){
+    console.log(user);
+      if(!err) done(null, user);
+      else done(err, null);
+    });
+});
 
-// Bring in defined Passport Strategy
-require('./config/passport')(passport);
+
 
 var users = require('./routes/users');
 //var badges = require('./routes/badges');
@@ -39,7 +48,7 @@ app.use(morgan('dev'));
 
 // Home route. We'll end up changing this to our main front end index later.
 app.get('/', function(req, res) {
-  res.json('Relax. We will put the home page here later.');
+  res.json('Welcome to the FlipCard API.');
 });
 
 // Connect to database
