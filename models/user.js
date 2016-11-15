@@ -34,10 +34,16 @@ const UserSchema = new mongoose.Schema({
   badges: [{
      type: Schema.Types.ObjectId, 
      ref: 'Badge' 
+  }],
+  logs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'UserLog'
   }]
 },{
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp.
 });
+
+
 
 // Saves the user's password hashed (plain text password storage is not good)
 UserSchema.pre('save', function (next) {
@@ -59,6 +65,9 @@ UserSchema.pre('save', function (next) {
     return next();
   }
 });
+
+
+
 
 // Create method to compare password input to password saved in database
 UserSchema.methods.comparePassword = function(pw, cb) {

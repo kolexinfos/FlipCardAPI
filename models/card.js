@@ -14,7 +14,11 @@ const CardSchema = new mongoose.Schema({
   _deck:{
      type: Number, 
      ref: 'Deck' 
-  }
+  },
+  logs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'CardLog'
+  }]
   
 },{
   timestamps: true // Saves createdAt and updatedAt as dates. createdAt will be our timestamp.

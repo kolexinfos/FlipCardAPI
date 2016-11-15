@@ -7,6 +7,12 @@ const UserLogSchema = new mongoose.Schema({
   logname: {
     type: String,
     required: true
+  },
+  start:{
+    type: Date
+  },
+  end: {
+   type: Date 
   }
   
 },{

@@ -15,6 +15,10 @@ const DeckSchema = new mongoose.Schema({
   _cards:[{
      type: Schema.Types.ObjectId, 
      ref: 'Card' 
+  }],
+  logs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'DeckLog'
   }]
   
 },{
