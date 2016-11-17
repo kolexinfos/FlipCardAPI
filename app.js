@@ -34,7 +34,7 @@ passport.deserializeUser(function(id, done) {
 
 var users = require('./routes/users');
 //var badges = require('./routes/badges');
-//var cards = require('./routes/badges');
+var cards = require('./routes/cards');
 //var decks = require('./routes/badges');
 
 
@@ -56,7 +56,7 @@ mongoose.connect(config.database);
 
 
 app.use('/users', users);
-//app.use('/badge', badges);
+app.use('/cards', cards);
 
 
 module.exports = app;

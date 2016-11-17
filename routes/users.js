@@ -5,7 +5,7 @@ var passport = require('passport');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.json({ message:'blast' });
+  res.json({ message:'Default' });
 });
 
 router.get('/auth/instagram',
